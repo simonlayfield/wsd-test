@@ -17,6 +17,9 @@ function initCharts() {
   // Empty the chart container
   CHART_CONTAINER.innerHTML = "";
 
+  // Change the main page title
+  $(".main__title").text(graphData[ACTIVE_INDEX].host.name);
+
   // Show a chart for each check
   for (let i = 0; i < graphData[ACTIVE_INDEX].nodes[0].checks.length; i++) {
     const check = graphData[ACTIVE_INDEX].nodes[0].checks[i];
@@ -27,7 +30,7 @@ function initCharts() {
     switch (check.name) {
       case "Server Free Disk Space":
         data = {
-          labels: ["Space Used", humanizeNumberInString(check.name)],
+          labels: ["Space Used", "Free Space Remaining"],
           dataset: [
             100 - roundNumber(getNumberFromString(check.message)),
             roundNumber(getNumberFromString(check.message)),
@@ -42,7 +45,7 @@ function initCharts() {
       case "Server Free System Memory":
         // Let's assume full capacity is 50,000 and work out a percentage
         data = {
-          labels: ["Space Used", check.name],
+          labels: ["Memory Used", "Free Memory Remaining"],
           dataset: [
             50000 - roundNumber(getNumberFromString(check.message)),
             roundNumber(getNumberFromString(check.message)),
@@ -61,24 +64,15 @@ function initCharts() {
 
 // Simply renders the necessary DOM elements for rendering chart content
 function renderChartContainer(checkData) {
-  // I realise theres some bloat that could be avoided here with jQuery
-  // Ironically did it this way for speed :/
-  const singleChartElement = document.createElement("div");
-  singleChartElement.classList.add("chart");
+  var chartMarkup = `
+    <div class="chart">
+        <h3>${checkData.name}</h3>
+        <p>${humanizeNumberInString(checkData.message)}</p>
+        <div id="${createIdFromName(checkData.name)}"></div>
+    </div>
+  `;
 
-  const chartTitleElement = document.createElement("h3");
-  chartTitleElement.innerText = checkData.name;
-  singleChartElement.appendChild(chartTitleElement);
-
-  const chartDescriptionElement = document.createElement("p");
-  chartDescriptionElement.innerText = humanizeNumberInString(checkData.message);
-  singleChartElement.appendChild(chartDescriptionElement);
-
-  const chartCanvasContainer = document.createElement("div");
-  chartCanvasContainer.id = createIdFromName(checkData.name);
-  singleChartElement.appendChild(chartCanvasContainer);
-
-  CHART_CONTAINER.appendChild(singleChartElement);
+  $(CHART_CONTAINER).append(chartMarkup);
 }
 
 // Renders the chart itself in to the DOM
@@ -159,6 +153,7 @@ function createIdFromName(string) {
 
 // This is too similar to getNumberFromString and should be broken up
 // Rounds the number within a string (message)
+// In retrospect I need this unit elsewhere so would have been good to extract it
 function humanizeNumberInString(string) {
   // First split the string
   const arrayOfStrings = string.split(" ");
