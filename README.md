@@ -3,7 +3,7 @@
 ### Run the things
 
 ```
-git clone
+git clone https://github.com/simonlayfield/wsd-test.git
 npm install
 node server.js
 ```
