@@ -4,6 +4,7 @@
 
 ```
 git clone https://github.com/simonlayfield/wsd-test.git
+cd wsd-test
 npm install
 node server.js
 ```
