@@ -1,0 +1,24 @@
+{
+  "name": "wsd-test",
+  "version": "1.0.0",
+  "description": "A tech test for WSD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonlayfield/wsd-test.git"
+  },
+  "author": "Simon Layfield",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simonlayfield/wsd-test/issues"
+  },
+  "homepage": "https://github.com/simonlayfield/wsd-test#readme",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1"
+  }
+}
