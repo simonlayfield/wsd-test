@@ -1,3 +1,52 @@
-.charts {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  text-align: center;
+}
+
+h1,
+h2,
+h3 {
+  margin-bottom: 1.5em;
+}
+p {
+  margin-bottom: 1rem;
+}
+
+.container {
+  margin: 0 auto;
   display: flex;
+  min-height: 100%;
+}
+
+.sidebar {
+  max-width: 450px;
+  padding: 2rem;
+  background: #333;
+  color: #fff;
+  min-height: 100vh;
+}
+.sidebar__title {
+  font-size: 1.2rem;
+}
+.main {
+  width: 100%;
+  margin-top: 2rem;
+}
+#charts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+}
+
+#charts > * {
+  width: 100%;
+  max-width: 400px;
 }

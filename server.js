@@ -6,29 +6,25 @@ app.engine("html", require("ejs").renderFile);
 const KEY = "coding_test";
 const SECRET = "bwZm5XC6HTlr3fcdzRnD";
 
-let TOKEN_DATA = null;
-let JOB_DATA = null;
-
-let appData = null;
+let APP_DATA = null;
 
 app.use(express.static("public"));
 
 app.get("/", async (req, res) => {
   const tokenData = await authenticate(); // Token returned
-  TOKEN_DATA = tokenData;
-  const jobData = await fetchJobId(tokenData); // Job id returned
-  JOB_DATA = jobData;
 
-  const statusData = await fetchStatusData(tokenData, jobData).then((data) => {
-    if (appData) {
+  const jobData = await fetchJobId(tokenData); // Job id returned
+
+  const statusData = await fetchStatusData(tokenData, jobData).then(() => {
+    if (APP_DATA) {
       let dataArray = [];
 
-      for (i = 0; i < appData.service_reports.length; i++) {
+      for (i = 0; i < APP_DATA.service_reports.length; i++) {
         if (
-          appData.service_reports[i].nodes.length &&
-          appData.service_reports[i].status_code == 200
+          APP_DATA.service_reports[i].nodes.length &&
+          APP_DATA.service_reports[i].status_code == 200
         ) {
-          dataArray.push(appData.service_reports[i]);
+          dataArray.push(APP_DATA.service_reports[i]);
         }
       }
 
@@ -68,8 +64,6 @@ const authenticate = async () => {
 };
 
 const fetchJobId = async (json) => {
-  // curl --location --request POST 'https://staging-gateway.priipcloud.com/api/v2.0/gateway/reports/status/service' \--header 'Authorization: [TOKEN]' \--header 'Accept: application/json'
-
   const jobIdRequest = fetch(
     "https://staging-gateway.priipcloud.com/api/v2.0/gateway/reports/status/service",
 
@@ -94,8 +88,6 @@ const fetchJobId = async (json) => {
 };
 
 const fetchStatusData = async (tokenData, jobData) => {
-  // curl --location --request GET 'https://staging-gateway.priipcloud.com/api/v2.0/gateway/reports/status/service/:job_id' \--header 'Authorization: [TOKEN]' \--header 'Accept: application/json'
-
   let statusDataRequest = await fetch(
     `https://staging-gateway.priipcloud.com/api/v2.0/gateway/reports/status/service/${jobData.job_id}`,
     {
@@ -118,7 +110,7 @@ const fetchStatusData = async (tokenData, jobData) => {
     await fetchStatusData(tokenData, jobData);
   } else {
     const newData = await statusDataRequest.json().then((data) => {
-      appData = data;
+      APP_DATA = data;
       return data;
     });
 
